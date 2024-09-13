@@ -47,11 +47,7 @@ if not os.path.exists('output'):
     os.makedirs('output')
 
 def relative_strength(closes: pd.Series, closes_ref: pd.Series):
-    rs_stock = strength(closes)
-    rs_ref = strength(closes_ref)
-    rs = (1 + rs_stock) / (1 + rs_ref) * 100
-    rs = int(rs*100) / 100 # round to 2 decimals
-    return rs
+    return strength(closes)
 
 def strength(closes: pd.Series):
     """Calculates the performance of the last year (most recent quarter is weighted double)"""
@@ -106,7 +102,7 @@ def rankings():
                 rs6m = relative_strength(closes_series.head(-6*month), closes_ref_series.head(-6*month))
 
                 # if rs is too big assume there is faulty price data
-                if rs < 600:
+                if rs < 2000:
                     # stocks output
                     ranks.append(len(ranks)+1)
                     relative_strengths.append((0, ticker, sector, industry, json[ticker]["universe"], rs, tmp_percentile, rs1m, rs3m, rs6m))
